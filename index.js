@@ -5,7 +5,7 @@ const path = require('path');
 const csv = require('fast-csv');
 const colors = require('colors');
 const { Pool } = require('pg');
-const { createDraftCombineQuery } = require('./queries');
+const { createDraftCombineQuery, createDraftQuery } = require('./queries');
 // Constants
 const credentials = {
     user: 'postgres',
@@ -63,14 +63,16 @@ const createTable = async (query) => {
 
 
 
-
-
 // Insert Into Tables
 
 (async () => {
     // Create Tables
     await createTable(createDraftCombineQuery);
     crateTableFromFile('Draft_Combine', 'draft_combine');
+
+    await createTable(createDraftQuery);
+    crateTableFromFile('Draft', 'draft');
+
 })();
 
 

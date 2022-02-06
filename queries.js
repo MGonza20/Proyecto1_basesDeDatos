@@ -121,4 +121,26 @@ CREATE TABLE draft_combine (
         )
 `
 
-module.exports = { createDraftCombineQuery };
+const createDraftQuery = `
+CREATE TABLE draft(
+    yearDraft VARCHAR,
+    numberPickOverall VARCHAR,
+    numberRound VARCHAR,
+    numberRoundPick VARCHAR,
+    namePlayer VARCHAR,
+    slugTeam VARCHAR,
+    nameOrganizationFrom VARCHAR,
+    typeOrganizationFrom VARCHAR,
+    idPlayer VARCHAR,
+    idTeam VARCHAR,
+    nameTeam VARCHAR,
+    cityTeam VARCHAR,
+    teamName VARCHAR,
+    PLAYER_PROFILE_FLAG VARCHAR,
+    slugOrganizationTypeFrom VARCHAR,
+    locationOrganizationFrom VARCHAR
+)
+`
+
+
+module.exports = { createDraftCombineQuery, createDraftQuery };
