@@ -5,7 +5,7 @@ const path = require('path');
 const csv = require('fast-csv');
 const colors = require('colors');
 const { Pool } = require('pg');
-const { createDraftCombineQuery, createDraftQuery } = require('./queries');
+const { createDraftCombineQuery, createDraftQuery, createPlayerQuery, createPlayerBiosQuery, createGameInactivePlayersQuery, createGameQuery } = require('./queries');
 // Constants
 const credentials = {
     user: 'postgres',
@@ -33,7 +33,10 @@ const crateTableFromFile = (fileName, tableName) => {
         .on('end', async (count) => {
             for (const row of parsedData) {
                 const pool = new Pool(credentials);
-                const values = Object.values(row).map(val => `'${val.replace("'", "''")}'`);
+                const values = Object.values(row).map(val => `'${val.replace(/'/g, "''")}'`);
+                console.log(`INSERT INTO ${tableName} VALUES(
+                        ${values.join(",")}
+                    )`);
                 await pool.query(`
                     INSERT INTO ${tableName} VALUES(
                         ${values.join(",")}                    
@@ -67,11 +70,26 @@ const createTable = async (query) => {
 
 (async () => {
     // Create Tables
-    await createTable(createDraftCombineQuery);
-    crateTableFromFile('Draft_Combine', 'draft_combine');
+    // await createTable(createDraftCombineQuery);
+    // crateTableFromFile('Draft_Combine', 'draft_combine');
 
-    await createTable(createDraftQuery);
-    crateTableFromFile('Draft', 'draft');
+    // await createTable(createDraftQuery);
+    // crateTableFromFile('Draft', 'draft');
+
+    await createTable(createPlayerQuery);
+    crateTableFromFile('Player', 'player');
+
+    // await createTable(createPlayerBiosQuery);
+    // crateTableFromFile('Player_Bios', 'player_bios');
+
+
+    // await createTable(createGameInactivePlayersQuery);
+    // crateTableFromFile('Game_Inactive_Players', 'game_inactive_players');
+
+
+    // await createTable(createGameQuery);
+    // crateTableFromFile('Game', 'game');
+
 
 })();
 
