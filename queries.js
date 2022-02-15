@@ -363,7 +363,174 @@ const createGameQuery = `
     )
 `;
 
+const createGameOficialsQuery = `
+        CREATE TABLE game_officials(
+            OFFICIAL_ID VARCHAR,
+            FIRST_NAME VARCHAR,
+            LAST_NAME VARCHAR,
+            JERSEY_NUM VARCHAR,
+            GAME_ID VARCHAR
+        );
+`;
 
+const createNewsMissingQuery = `
+        CREATE TABLE news_missing(
+            link VARCHAR,
+            exception VARCHAR,
+            extraction_date VARCHAR
+        );
+`;
+
+const createNewsQuery = `
+        CREATE TABLE news(
+            title VARCHAR,
+            author VARCHAR,
+            published_date VARCHAR,
+            published_date_precision VARCHAR,
+            link VARCHAR,
+            clean_url VARCHAR,
+            summary VARCHAR,
+            rights VARCHAR,
+            rank VARCHAR,
+            topic VARCHAR,
+            country VARCHAR,
+            language VARCHAR,
+            authors VARCHAR,
+            media VARCHAR,
+            is_opinion VARCHAR,
+            twitter_account VARCHAR,
+            _score VARCHAR,
+            _id VARCHAR,
+            page_number VARCHAR,
+            query VARCHAR,
+            text VARCHAR,
+            top_image VARCHAR,
+            images VARCHAR,
+            movies VARCHAR,
+            html VARCHAR,
+            article_html VARCHAR,
+            querystring_q VARCHAR,
+            querystring_lang VARCHAR,
+            querystring_page_size VARCHAR,
+            querystring_from VARCHAR,
+            querystring_to VARCHAR,
+            querystring_page VARCHAR,
+            scrape_date VARCHAR
+        );
+`;
+
+const createPlayerAttributesQuery = `
+            CREATE TABLE player_attributes(
+                ID VARCHAR,
+                FIRST_NAME VARCHAR,
+                LAST_NAME VARCHAR,
+                DISPLAY_FIRST_LAST VARCHAR,
+                DISPLAY_LAST_COMMA_FIRST VARCHAR,
+                DISPLAY_FI_LAST VARCHAR,
+                PLAYER_SLUG VARCHAR,
+                BIRTHDATE VARCHAR,
+                SCHOOL VARCHAR,
+                COUNTRY VARCHAR,
+                LAST_AFFILIATION VARCHAR,
+                HEIGHT VARCHAR,
+                WEIGHT VARCHAR,
+                SEASON_EXP VARCHAR,
+                JERSEY VARCHAR,
+                POSITION VARCHAR,
+                ROSTERSTATUS VARCHAR,
+                GAMES_PLAYED_CURRENT_SEASON_FLAG VARCHAR,
+                TEAM_ID VARCHAR,
+                TEAM_NAME VARCHAR,
+                TEAM_ABBREVIATION VARCHAR,
+                TEAM_CODE VARCHAR,
+                TEAM_CITY VARCHAR,
+                PLAYERCODE VARCHAR,
+                FROM_YEAR VARCHAR,
+                TO_YEAR VARCHAR,
+                DLEAGUE_FLAG VARCHAR,
+                NBA_FLAG VARCHAR,
+                GAMES_PLAYED_FLAG VARCHAR,
+                DRAFT_YEAR VARCHAR,
+                DRAFT_ROUND VARCHAR,
+                DRAFT_NUMBER VARCHAR,
+                PTS VARCHAR,
+                AST VARCHAR,
+                REB VARCHAR,
+                ALL_STAR_APPEARANCES VARCHAR,
+                PIE VARCHAR
+            );
+`;
+
+const createPlayerSalaryQuery = `
+            CREATE TABLE player_salary (
+                slugSeason VARCHAR,
+                nameTeam VARCHAR,
+                namePlayer VARCHAR,
+                statusPlayer VARCHAR,
+                isFinalSeason VARCHAR,
+                isWaived VARCHAR,
+                isOnRoster VARCHAR,
+                isNonGuaranteed VARCHAR,
+                isTeamOption VARCHAR,
+                isPlayerOption VARCHAR,
+                typeContractDetail VARCHAR,
+                value VARCHAR
+            )
+`;
+
+const createTeamAttributesQuery = `
+            CREATE TABLE team_attributes (
+                ID VARCHAR,
+                ABBREVIATION VARCHAR,
+                NICKNAME VARCHAR,
+                YEARFOUNDED VARCHAR,
+                CITY VARCHAR,
+                ARENA VARCHAR,
+                ARENACAPACITY VARCHAR,
+                OWNER VARCHAR,
+                GENERALMANAGER VARCHAR,
+                HEADCOACH VARCHAR,
+                DLEAGUEAFFILIATION VARCHAR,
+                FACEBOOK_WEBSITE_LINK VARCHAR,
+                INSTAGRAM_WEBSITE_LINK VARCHAR,
+                TWITTER_WEBSITE_LINK VARCHAR
+            );
+`;
+const createTeamHistoryQuery = `
+            CREATE TABLE team_history(
+                ID VARCHAR,
+                CITY VARCHAR,
+                NICKNAME VARCHAR,
+                YEARFOUNDED VARCHAR,
+                YEARACTIVETILL VARCHAR
+            );
+`;
+
+const createTeamSalaryQuery = `
+            CREATE TABLE team_salary(
+                nameTeam VARCHAR,
+                slugTeam VARCHAR,
+                urlTeamSalaryHoopsHype VARCHAR,
+                X2020_21 VARCHAR,
+                X2021_22 VARCHAR,
+                X2022_23 VARCHAR,
+                X2023_24 VARCHAR,
+                X2024_25 VARCHAR,
+                X2025_26 VARCHAR
+            );
+`;
+
+const createTeamQuery = `
+            CREATE TABLE team(
+                id VARCHAR,
+                full_name VARCHAR,
+                abbreviation VARCHAR,
+                nickname VARCHAR,
+                city VARCHAR,
+                state VARCHAR,
+                year_founded VARCHAR
+            )
+`;
 
 module.exports = {
     createDraftCombineQuery,
@@ -371,5 +538,14 @@ module.exports = {
     createPlayerBiosQuery,
     createGameQuery,
     createGameInactivePlayersQuery,
-    createPlayerQuery
+    createPlayerQuery,
+    createGameOficialsQuery,
+    createNewsMissingQuery,
+    createNewsQuery,
+    createPlayerAttributesQuery,
+    createPlayerSalaryQuery,
+    createTeamAttributesQuery,
+    createTeamHistoryQuery,
+    createTeamSalaryQuery,
+    createTeamQuery
 };

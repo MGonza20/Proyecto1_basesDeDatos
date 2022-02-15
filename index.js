@@ -5,12 +5,12 @@ const path = require('path');
 const csv = require('fast-csv');
 const colors = require('colors');
 const { Pool } = require('pg');
-const { createDraftCombineQuery, createDraftQuery, createPlayerQuery, createPlayerBiosQuery, createGameInactivePlayersQuery, createGameQuery } = require('./queries');
+const { createDraftCombineQuery, createDraftQuery, createPlayerQuery, createPlayerBiosQuery, createGameInactivePlayersQuery, createGameQuery, createGameOficialsQuery, createNewsMissingQuery, createNewsQuery, createPlayerAttributesQuery, createTeamAttributesQuery, createTeamHistoryQuery, createTeamSalaryQuery, createTeamQuery, createPlayerSalaryQuery } = require('./queries');
 // Constants
 const credentials = {
     user: 'postgres',
     host: 'localhost',
-    database: 'flights',
+    database: 'proyecto01',
     password: '2302',
     port: 5432
 }
@@ -83,12 +83,40 @@ const createTable = async (query) => {
     // crateTableFromFile('Player_Bios', 'player_bios');
 
 
-    await createTable(createGameInactivePlayersQuery);
-    crateTableFromFile('Game_Inactive_Players', 'game_inactive_players');
+    // await createTable(createGameInactivePlayersQuery);
+    // crateTableFromFile('Game_Inactive_Players', 'game_inactive_players');
 
 
     // await createTable(createGameQuery);
     // crateTableFromFile('Game', 'game');
+
+    // await createTable(createGameOficialsQuery);
+    // crateTableFromFile('Game_Officials', 'game_officials');
+
+    // await createTable(createNewsMissingQuery);
+    // crateTableFromFile('News_Missing', 'news_missing');
+
+    // await createTable(createNewsQuery);
+    // crateTableFromFile('News', 'news');
+
+    // await createTable(createPlayerAttributesQuery);
+    // crateTableFromFile('Player_Attributes', 'player_attributes');
+
+    // await createTable(createPlayerSalaryQuery);
+    // crateTableFromFile('Player_Salary', 'player_salary');
+
+    // await createTable(createTeamAttributesQuery);
+    // crateTableFromFile('Team_Attributes', 'team_attributes');
+
+    // await createTable(createTeamHistoryQuery);
+    // crateTableFromFile('Team_History', 'team_history');
+
+    // await createTable(createTeamSalaryQuery);
+    // crateTableFromFile('Team_Salary', 'team_salary');
+
+    // await createTable(createTeamQuery);
+    // crateTableFromFile('Team', 'team');
+
 
 
 })();
