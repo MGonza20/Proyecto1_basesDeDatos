@@ -211,9 +211,9 @@ CREATE TABLE game_inactive_players (
 `;
 const createGameQuery = `
     CREATE TABLE game(
-        GAME_ID VARCHAR,
-        SEASON_ID VARCHAR,
-        TEAM_ID_HOME VARCHAR,
+        GAME_ID INTEGER,
+        SEASON_ID INTEGER,
+        TEAM_ID_HOME INTEGER,
         TEAM_ABBREVIATION_HOME VARCHAR,
         TEAM_NAME_HOME VARCHAR,
         GAME_DATE VARCHAR,
@@ -237,7 +237,7 @@ const createGameQuery = `
         BLK_HOME VARCHAR,
         TOV_HOME VARCHAR,
         PF_HOME VARCHAR,
-        PTS_HOME VARCHAR,
+        PTS_HOME INTEGER,
         PLUS_MINUS_HOME VARCHAR,
         VIDEO_AVAILABLE_HOME VARCHAR,
         TEAM_ID_AWAY VARCHAR,
@@ -263,7 +263,7 @@ const createGameQuery = `
         BLK_AWAY VARCHAR,
         TOV_AWAY VARCHAR,
         PF_AWAY VARCHAR,
-        PTS_AWAY VARCHAR,
+        PTS_AWAY INTEGER,
         PLUS_MINUS_AWAY VARCHAR,
         VIDEO_AVAILABLE_AWAY VARCHAR,
         GAME_DATE_EST VARCHAR,

@@ -87,8 +87,8 @@ const createTable = async (query) => {
     // crateTableFromFile('Game_Inactive_Players', 'game_inactive_players');
 
 
-    // await createTable(createGameQuery);
-    // crateTableFromFile('Game', 'game');
+    await createTable(createGameQuery);
+    crateTableFromFile('Game', 'game');
 
     // await createTable(createGameOficialsQuery);
     // crateTableFromFile('Game_Officials', 'game_officials');
