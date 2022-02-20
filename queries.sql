@@ -88,8 +88,127 @@ GROUP BY official_id, first_name, last_name
 ORDER BY numero_juegos DESC
 LIMIT 5;
 
+-- Pregunta 05 B
+-- Parte 1 -> Obtener todas las temporadas
+SELECT season_id FROM game
+GROUP BY season_id
+ORDER BY season_id DESC;
+-- Parte 2 -> Obtener el prolongamiento de partidos por cada temporada
+SELECT '2011-12-31 01:00:00'::timestamp - '2011-12-29 23:00:00'::timestamp;
 
- 
+SELECT game_date 
+	FROM game g2
+	WHERE g2.season_id = 22020
+	ORDER BY game_date DESC
+	LIMIT 1;
+
+SELECT season_id,
+(
+	SELECT MAX(game_date) 
+	FROM game g2
+	WHERE g2.season_id = game.season_id
+) -
+(
+	SELECT MIN(game_date)
+	FROM game g2
+	WHERE g2.season_id = game.season_id
+) AS diferencia_fecha
+FROM game
+GROUP BY season_id
+ORDER BY diferencia_fecha DESC
+LIMIT 3;
+
+-- Pregunta 06
+-- CAMBIO: <game>team_id_home a INT
+ALTER TABLE game
+ALTER COLUMN team_id_home TYPE INT USING team_id_home::INT,
+ALTER COLUMN team_id_away TYPE INT USING team_id_away::INT;
+-- CAMBIO: <game>pts_home a INT
+-- Obtener la diferencia a favor en juegos por equipo cuando es home
+
+SELECT 
+team_id_home AS team_id,
+team_name_home AS team_name, 
+AVG(game.pts_home-game.pts_away) AS diferencia
+FROM game
+GROUP BY team_id, team_name
+ORDER BY team_id DESC;
+
+-- Obtener la diferencia cuando el equipo es visitante
+SELECT 
+team_id_away AS team_id,
+team_name_away AS team_name, 
+AVG(game.pts_away-game.pts_home) AS diferencia
+FROM game
+GROUP BY team_id, team_name
+ORDER BY team_id DESC;
+
+-- Combinar ambas queries
+-- SEASON ID 2017
+-- SEASON ID 2018
+SELECT 
+team_name,
+AVG(diferencia) as avg_diferencia
+FROM(
+SELECT 
+team_id_home AS team_id,
+team_name_home AS team_name, 
+AVG(game.pts_home-game.pts_away) AS diferencia
+FROM game
+WHERE game.season_id = 22018
+GROUP BY team_id, team_name
+UNION
+SELECT 
+team_id_away AS team_id,
+team_name_away AS team_name, 
+AVG(game.pts_away-game.pts_home) AS diferencia
+FROM game
+WHERE game.season_id = 22018
+GROUP BY team_id, team_name
+ORDER BY team_name DESC
+) team
+GROUP BY team.team_id, team.team_name
+ORDER BY avg_diferencia DESC
+LIMIT 1;
+
+-- Pregunta 08
+-- CAMBIO: <team_salary>X2020-21 a FLOAT
+ALTER TABLE team_salary
+ALTER COLUMN "x2020_21" TYPE INT USING x2020_21::FLOAT,
+ALTER COLUMN "x2021_22" TYPE INT USING x2021_22::FLOAT;
+-- CAMBIO: <team_salary>X2021-22 a FLOAT
+
+-- Obtener el numero de equipos por estoad
+SELECT state, COUNT(*)
+FROM team
+GROUP BY state;
 
 
+-- Filtrar la tabla estado y hacer una sub query del salario
+SELECT state, (
+	SELECT SUM(x2020_21)
+	FROM team_salary
+	WHERE team_salary.slugTeam IN (
+		SELECT abbreviation
+		FROM team t
+		WHERE t.state = team.state
+	)
+) as salaries
+FROM team
+GROUP BY state
+ORDER BY salaries DESC
+LIMIT 5;
 
+SELECT state, (
+	SELECT SUM(x2021_22)
+	FROM team_salary
+	WHERE team_salary.slugTeam IN (
+		SELECT abbreviation
+		FROM team t
+		WHERE t.state = team.state
+	)
+) as salaries
+FROM team
+GROUP BY state
+ORDER BY salaries DESC
+LIMIT 5;
