@@ -53,6 +53,62 @@ WHERE player.is_active = true
 ORDER BY player_attributes.height ASC
 LIMIT 1;
 
+-- Pregunta 02
+-- Promedio de puntos anotados y recibidos por cada equipo
+
+-- Paso 1 -> Filtrar juegos con fecha mayora 2015/01/01
+SELECT    *
+FROM	game
+WHERE	game_date >= '2015-01-01';
+
+SELECT      season_id, team_name_home, COUNT(*)
+FROM        game
+WHERE       game_date >= '2015-01-01'
+GROUP BY    season_id, team_name_home
+ORDER BY team_name_home DESC;
+
+-- Paso 2 -> Obtener promedio de puntos cuando son home
+SELECT      season_id, team_name_home, 
+AVG(pts_home) AS promedio_puntos_anotados,
+AVG(pts_away) AS promedio_puntos_recibidos
+FROM        game
+WHERE       game_date >= '2015-01-01'
+GROUP BY    season_id, team_name_home
+ORDER BY team_name_home DESC;
+
+-- Paso 2 -> Obtener promedio de puntos cuando son away
+SELECT      season_id, team_name_away, 
+AVG(pts_away) AS promedio_puntos_anotados,
+AVG(pts_home) AS promedio_puntos_recibidos
+FROM        game
+WHERE       game_date >= '2015-01-01'
+GROUP BY    season_id, team_name_away
+ORDER BY team_name_away DESC;
+
+-- Paso 3 -> Unir ambas queries
+SELECT 
+season_id,
+team_name, 
+avg(p.promedio_puntos_anotados) AS promedio_puntos_anotados, 
+avg(p.promedio_puntos_recibidos) AS promedio_puntos_recibidos
+FROM (
+	SELECT      season_id, team_name_home AS team_name, 
+	AVG(pts_home) AS promedio_puntos_anotados,
+	AVG(pts_away) AS promedio_puntos_recibidos
+	FROM        game
+	WHERE       game_date >= '2015-01-01'
+	GROUP BY    season_id, team_name
+	UNION
+	SELECT      season_id, team_name_away AS team_name, 
+	AVG(pts_away) AS promedio_puntos_anotados,
+	AVG(pts_home) AS promedio_puntos_recibidos
+	FROM        game
+	WHERE       game_date >= '2015-01-01'
+	GROUP BY    season_id, team_name
+) AS p
+GROUP BY season_id, team_name
+ORDER BY (team_name,season_id) ASC;
+
 
 -- Pregunta 03
 -- CAMBIO: <game_officials>official_id a INT
@@ -118,6 +174,13 @@ GROUP BY season_id
 ORDER BY diferencia_fecha DESC
 LIMIT 3;
 
+-- Pregunta 05
+SELECT season_id, COUNT(*) AS cant_partidos
+FROM game
+GROUP BY season_id
+ORDER BY cant_partidos DESC
+LIMIT 1;
+
 -- Pregunta 06
 -- CAMBIO: <game>team_id_home a INT
 ALTER TABLE game
@@ -170,6 +233,16 @@ ORDER BY team_name DESC
 GROUP BY team.team_id, team.team_name
 ORDER BY avg_diferencia DESC
 LIMIT 1;
+-- Pregunta 07
+
+SELECT ps.nameplayer, ps.value
+FROM draft AS d
+INNER JOIN player_salary AS ps
+ON d.nameplayer = ps.nameplayer
+WHERE yeardraft = '2018.0' AND slugseason = '2021-22'
+ORDER BY ps.value DESC
+LIMIT 1;
+
 
 -- Pregunta 08
 -- CAMBIO: <team_salary>X2020-21 a FLOAT
@@ -212,3 +285,4 @@ FROM team
 GROUP BY state
 ORDER BY salaries DESC
 LIMIT 5;
+
