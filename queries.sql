@@ -144,6 +144,18 @@ GROUP BY official_id, first_name, last_name
 ORDER BY numero_juegos DESC
 LIMIT 5;
 
+-- CAMBIO: <team_salary>x2021_22 a FLOAT
+ALTER TABLE		team_salary
+ALTER COLUMN	x2021_22 
+TYPE 			FLOAT
+USING			x2021_22::FLOAT
+-- CAMBIO: <team_salary>x2021_22 a FLOAT
+
+SELECT		nameteam AS nombre_equipo, x2021_22 AS salario
+FROM		team_salary
+ORDER BY	x2021_22 DESC
+LIMIT		1;
+
 -- Pregunta 05 B
 -- Parte 1 -> Obtener todas las temporadas
 SELECT season_id FROM game
@@ -243,6 +255,21 @@ WHERE yeardraft = '2018.0' AND slugseason = '2021-22'
 ORDER BY ps.value DESC
 LIMIT 1;
 
+-- Pregunta 7
+-- CAMBIO: <player_salary>value a FLOAT
+ALTER TABLE		player_salary
+ALTER COLUMN	value 
+TYPE 			FLOAT
+USING			value::FLOAT
+-- CAMBIO: <player_salary>value a FLOAT
+
+SELECT		ps.nameplayer, ps.value
+FROM		draft AS d
+INNER JOIN	player_salary AS ps
+ON			d.nameplayer = ps.nameplayer
+WHERE		yeardraft = '2018.0'	AND	slugseason = '2021-22'
+ORDER BY	ps.value DESC
+LIMIT		1;
 
 -- Pregunta 08
 -- CAMBIO: <team_salary>X2020-21 a FLOAT
