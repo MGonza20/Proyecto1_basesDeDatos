@@ -56,3 +56,53 @@ ON	team.id = sub.team_id
 ORDER BY	asists	DESC
 
 
+--
+-- Respuesta -- Equipos con menos turnovers - Top 5  
+--
+
+-- CAMBIO: <game>TEAM_TURNOVERS_AWAY a FLOAT
+ALTER TABLE game
+ALTER COLUMN team_turnovers_away TYPE FLOAT USING team_turnovers_away::FLOAT
+-- CAMBIO: <game>TEAM_TURNOVERS_AWAY a FLOAT
+
+UPDATE game
+SET TEAM_TURNOVERS_AWAY ='0'
+WHERE TEAM_TURNOVERS_AWAY = '';	
+
+-- Seleccionar ...
+SELECT	team_name_home		AS	team_name,
+SUM(TEAM_TURNOVERS_AWAY)	AS	total_turnovers
+FROM						game
+WHERE						game_date >= '2015-01-01'
+GROUP BY					team_name
+UNION
+SELECT	team_name_away		AS	team_name,
+SUM(TEAM_TURNOVERS_AWAY)	AS	total_turnovers
+FROM						game
+WHERE						game_date >= '2015-01-01'
+GROUP BY					team_name
+ORDER BY                    total_turnovers ASC
+
+
+-- Respuesta 13 -- Equipos con menos turnovers - Top 5 
+SELECT	team_name,
+SUM(sub.total_turnovers) as total_TO
+FROM(
+	SELECT	team_name_home		AS	team_name,
+	SUM(TEAM_TURNOVERS_AWAY)	AS	total_turnovers
+	FROM						game
+	WHERE						game_date >= '2015-01-01'
+	GROUP BY					team_name
+	UNION
+	SELECT	team_name_away		AS	team_name,
+	SUM(TEAM_TURNOVERS_AWAY)	AS	total_turnovers
+	FROM						game
+	WHERE						game_date >= '2015-01-01'
+	GROUP BY					team_name
+	ORDER BY                    total_turnovers ASC
+) AS sub
+GROUP BY team_name
+ORDER BY total_TO ASC
+LIMIT 5;
+
+
