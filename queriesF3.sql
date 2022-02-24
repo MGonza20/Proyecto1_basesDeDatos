@@ -105,4 +105,62 @@ GROUP BY team_name
 ORDER BY total_TO ASC
 LIMIT 5;
 
+--
+-- Respuesta 14 -- Equipos con mas steals -- Top 5
+--
+
+-- CAMBIO: <game>stl_home a FLOAT
+ALTER TABLE game
+ALTER COLUMN stl_home TYPE FLOAT USING stl_home::FLOAT 
+-- CAMBIO: <game>stl_home a FLOAT
+
+-- CAMBIO: <game>stl_away a FLOAT
+ALTER TABLE game
+ALTER COLUMN stl_away TYPE FLOAT USING stl_away::FLOAT 
+-- CAMBIO: <game>stl_away a FLOAT
+
+
+UPDATE game
+SET stl_home ='0'
+WHERE stl_home = '';	
+
+UPDATE game
+SET stl_away ='0'
+WHERE stl_away = '';	
+
+-- SELECCIONAR DATA ...
+SELECT	team_name_home		AS	team_name,
+SUM(stl_home)				AS	steals
+FROM						(game
+WHERE						game_date >= '2015-01-01'
+GROUP BY					team_name
+UNION
+SELECT	team_name_away		AS	team_name,
+SUM(stl_away)				AS	steals
+FROM						game
+WHERE						game_date >= '2015-01-01'
+GROUP BY					team_name
+ORDER BY                    steals DESC
+LIMIT						5;
+							 
+
+-- Respuesta 14 -- Equipos con mas steals -- Top 5
+SELECT team_name, SUM(sub.steals) as stealss
+FROM (
+	SELECT	team_name_home		AS	team_name,
+	SUM(stl_home)				AS	steals
+	FROM						game
+	WHERE						game_date >= '2015-01-01'
+	GROUP BY					team_name
+	UNION
+	SELECT	team_name_away		AS	team_name,
+	SUM(stl_away)				AS	steals
+	FROM						game
+	WHERE						game_date >= '2015-01-01'
+	GROUP BY					team_name
+	ORDER BY                    steals DESC
+) 	AS sub
+GROUP BY	team_name
+ORDER BY 	stealss	DESC 
+LIMIT		5;
 
