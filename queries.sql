@@ -44,14 +44,6 @@ WHERE player.is_active = true
 ORDER BY player_attributes.height DESC
 LIMIT 1;
 
-SELECT display_first_last AS nombre_apellido, 
-MAX(ROUND((player_attributes.height)/39.37,2)) AS altura_metros
-FROM player
-LEFT JOIN player_attributes ON player_attributes.id = player.id 
-WHERE player.is_active = true;
-
-
-SELECT * FROM player;
 -- Respuesta B
 SELECT display_first_last AS nombre_apellido, 
 ROUND((player_attributes.height)/39.37,2) AS altura_metros
@@ -94,28 +86,8 @@ GROUP BY    season_id, team_name_away
 ORDER BY team_name_away DESC;
 
 -- Paso 3 -> Unir ambas queries
-SELECT 
-season_id,
-team_name, 
-avg(p.promedio_puntos_anotados) AS promedio_puntos_anotados, 
-avg(p.promedio_puntos_recibidos) AS promedio_puntos_recibidos
-FROM (
-	SELECT      season_id, team_name_home AS team_name, 
-	AVG(pts_home) AS promedio_puntos_anotados,
-	AVG(pts_away) AS promedio_puntos_recibidos
-	FROM        game
-	WHERE       game_date >= '2015-01-01'
-	GROUP BY    season_id, team_name
-	UNION
-	SELECT      season_id, team_name_away AS team_name, 
-	AVG(pts_away) AS promedio_puntos_anotados,
-	AVG(pts_home) AS promedio_puntos_recibidos
-	FROM        game
-	WHERE       game_date >= '2015-01-01'
-	GROUP BY    season_id, team_name
-) AS p
-GROUP BY season_id, team_name
-ORDER BY (team_name,season_id) ASC;
+ALTER TABLE game
+ALTER COLUMN season_id TYPE INT USING season_id::INT;
 
 SELECT 
 team_name, 
@@ -164,6 +136,9 @@ ALTER COLUMN game_id TYPE INT USING game_id::INT;
 ALTER TABLE game
 ALTER COLUMN pts_home TYPE INT USING pts_home::INT,
 ALTER COLUMN pts_away TYPE INT USING pts_away::INT;
+
+ALTER TABLE game
+ALTER COLUMN game_id TYPE INT USING game_id::INT;
 -- CAMBIO: <game>pts_home a INT
 -- Parte 01, traer los partidos donde haya perdido el visitante
 SELECT COUNT(*)
@@ -173,7 +148,7 @@ WHERE pts_home-pts_away > 0
 SELECT CONCAT(first_name, ' ', last_name) AS nombre
 FROM game_officials
 GROUP BY official_id, first_name, last_name;
--- Respuesta
+-- Respuesta !!!!!!!
 SELECT official_id, CONCAT(first_name, ' ', last_name) AS nombre,
 COUNT(game) AS numero_juegos
 FROM game_officials
@@ -191,12 +166,26 @@ TYPE 			FLOAT
 USING			x2021_22::FLOAT
 -- CAMBIO: <team_salary>x2021_22 a FLOAT
 
+
+-- Pregunta 04
 SELECT		nameteam AS nombre_equipo, x2021_22 AS salario
 FROM		team_salary
 ORDER BY	x2021_22 DESC
 LIMIT		1;
 
+-- Pregunta 05 A
+SELECT season_id, COUNT(*) AS cant_partidos
+FROM game
+GROUP BY season_id
+ORDER BY cant_partidos DESC
+LIMIT 1;
+
+
 -- Pregunta 05 B
+ALTER TABLE		game
+ALTER COLUMN	game_date 
+TYPE 			DATE
+USING			game_date::DATE
 -- Parte 1 -> Obtener todas las temporadas
 SELECT season_id FROM game
 GROUP BY season_id
@@ -225,13 +214,6 @@ FROM game
 GROUP BY season_id
 ORDER BY diferencia_fecha DESC
 LIMIT 3;
-
--- Pregunta 05
-SELECT season_id, COUNT(*) AS cant_partidos
-FROM game
-GROUP BY season_id
-ORDER BY cant_partidos DESC
-LIMIT 1;
 
 -- Pregunta 06
 -- CAMBIO: <game>team_id_home a INT
@@ -318,13 +300,7 @@ ALTER COLUMN "x2020_21" TYPE INT USING x2020_21::FLOAT,
 ALTER COLUMN "x2021_22" TYPE INT USING x2021_22::FLOAT;
 -- CAMBIO: <team_salary>X2021-22 a FLOAT
 
--- Obtener el numero de equipos por estoad
-SELECT state, COUNT(*)
-FROM team
-GROUP BY state;
 
-
--- Filtrar la tabla estado y hacer una sub query del salario
 SELECT state, (
 	SELECT SUM(x2020_21)
 	FROM team_salary
@@ -336,6 +312,15 @@ SELECT state, (
 ) as salaries
 FROM team
 GROUP BY state
+HAVING (
+	SELECT SUM(x2020_21)
+	FROM team_salary
+	WHERE team_salary.slugTeam IN (
+		SELECT abbreviation
+		FROM team t
+		WHERE t.state = team.state
+	)
+) > 0
 ORDER BY salaries DESC
 LIMIT 5;
 
@@ -350,16 +335,21 @@ SELECT state, (
 ) as salaries
 FROM team
 GROUP BY state
+HAVING (
+	SELECT SUM(x2021_22)
+	FROM team_salary
+	WHERE team_salary.slugTeam IN (
+		SELECT abbreviation
+		FROM team t
+		WHERE t.state = team.state
+	)
+) > 0
 ORDER BY salaries DESC
 LIMIT 5;
 
 
-SELECT AST FROM player_attributes
-LIMIT 5;
 
 
-SELECT distinct team_name 
-FROM player_attributes;
 
 
 
