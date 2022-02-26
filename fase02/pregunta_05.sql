@@ -9,6 +9,14 @@ FROM game
 GROUP BY season_id
 ORDER BY cant_partidos DESC
 LIMIT 1;
+
+SELECT season_id, COUNT(*) AS cant_partidos
+FROM game
+WHERE game.season_id >= 22015
+GROUP BY season_id
+ORDER BY cant_partidos DESC
+LIMIT 1;
+
 -- Temporada que se prolongo mas
 SELECT season_id,
 (

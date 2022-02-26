@@ -78,4 +78,5 @@ t2020.won_games AS won_2020,
 FROM teams_summary_2019 t2019
 LEFT JOIN teams_summary_2020 t2020 ON t2020.team_id = t2019.team_id
 LEFT JOIN team ON team.id = t2020.team_id
-ORDER BY pct_change DESC;
+ORDER BY pct_change DESC
+LIMIT 5;
