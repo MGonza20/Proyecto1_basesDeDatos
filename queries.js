@@ -206,7 +206,7 @@ CREATE TABLE game_inactive_players (
     TEAM_CITY VARCHAR,
     TEAM_NAME VARCHAR,
     TEAM_ABBREVIATION VARCHAR,
-    GAME_ID VARCHAR
+    GAME_ID INTEGER
 )
 `;
 const createGameQuery = `
@@ -216,7 +216,7 @@ const createGameQuery = `
         TEAM_ID_HOME INTEGER,
         TEAM_ABBREVIATION_HOME VARCHAR,
         TEAM_NAME_HOME VARCHAR,
-        GAME_DATE VARCHAR,
+        GAME_DATE DATE,
         MATCHUP_HOME VARCHAR,
         WL_HOME VARCHAR,
         MIN_HOME VARCHAR,
