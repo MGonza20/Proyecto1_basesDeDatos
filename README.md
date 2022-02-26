@@ -1,5 +1,12 @@
-# Proyecto 01 - Bases de Datos
+# Proyecto 01 - Bases de Datos 💾
 
-## Programa para cargar los CSV en PostgreSQL
+## Para cargar los datos
 
-Run program with `npm start`
+1. Ingresar archivos csv en una carpeta `files`
+2. Instalar dependencias `npm install`
+3. Iniciar el programa `npm start`
+
+## Resultados
+
+1. Los resultados de la fase 02 estan en la carpeta `fase02`
+2. Los resultados de la fase 3 están en la carpeta `fase03`
